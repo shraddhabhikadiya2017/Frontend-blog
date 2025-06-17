@@ -1,5 +1,16 @@
+import { Routes, Route } from "react-router";
+
+import { MainLayout } from "./layouts/MainLayout";
+import { Homepage } from "./pages/index";
+
 const App = () => {
-  return <h1 className='text-3xl font-bold underline'>React + TailwindCSS</h1>;
+  return (
+    <Routes>
+      <Route element={<MainLayout />}>
+        <Route path="/" element={<Homepage />} />
+      </Route>
+    </Routes>
+  );
 };
- 
+
 export default App;
