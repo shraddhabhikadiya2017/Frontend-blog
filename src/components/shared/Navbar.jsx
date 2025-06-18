@@ -7,7 +7,7 @@ export const Navbar = () => {
         <Link to="/" className="font-semibold hover:text-neutral-200">
           Home
         </Link>
-        <Link to="/" className="font-semibold hover:text-neutral-200">
+        <Link to="/newPost" className="font-semibold hover:text-neutral-200">
           Add Post
         </Link>
       </div>

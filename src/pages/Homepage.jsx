@@ -1,48 +1,52 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router";
 
-// only for preview
-const deleteLater = [
-  {
-    id: "1",
-    image:
-      "https://images.pexels.com/photos/1371360/pexels-photo-1371360.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    title: "Lorem ipsum dolor sit amet",
-    content:
-      "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
-  },
-  {
-    id: "2",
-    image:
-      "https://images.pexels.com/photos/1271619/pexels-photo-1271619.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    title: "Lorem ipsum dolor sit amet",
-    content:
-      "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
-  },
-];
-
 export const Homepage = () => {
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    const storedPosts = JSON.parse(localStorage.getItem("posts")) || [];
+    setPosts(storedPosts);
+  }, []);
+
+  if (posts.length === 0) {
+    return (
+      <div className="max-w-7xl mx-auto py-8 px-4 text-center text-gray-500">
+        No posts available. Please create a new post.
+      </div>
+    );
+  }
+
   return (
-    <div className="flex flex-col gap-12 max-w-7xl mx-auto py-8 px-4 justify-center">
-      {deleteLater.map((card) => (
+    <div className="max-w-4xl mx-auto py-8 px-4 flex flex-col gap-8 items-start">
+      {posts.map((post) => (
         <div
-          key={card.id}
-          className="flex max-w-4xl gap-6 mx-auto flex-wrap sm:flex-nowrap"
+          key={post.id}
+          className="flex w-full border border-gray-200 bg-white rounded-lg shadow-sm overflow-hidden"
         >
-          <div className="w-full sm:w-44 sm:aspect-square">
+          <div className="w-44 h-44 flex-shrink-0">
             <img
-              src={card.image}
-              alt={card.title}
-              className="w-full h-48 sm:h-full object-cover rounded-lg shadow-md border border-gray-300"
+              src={post.image}
+              alt={post.title}
+              className="w-full h-full object-cover"
             />
           </div>
-          <div className="flex flex-col gap-2 justify-center flex-1">
-            <h2 className="text-black font-bold text-xl">{card.title}</h2>
-            <p className="text-gray-900 line-clamp-3">{card.content}</p>
+
+          <div className="p-4 flex flex-col justify-between w-full">
+            <div>
+              <h2 className="text-lg font-bold text-gray-900 mb-1">
+                {post.title}
+              </h2>
+              <p className="text-gray-700 text-sm overflow-hidden text-ellipsis line-clamp-3 h-[4.5em]">
+                {post.content}
+              </p>
+            </div>
+
             <Link
-               to={`/posts/${card.id}`}
-              className="self-start bg-[#a2ae9e] rounded-md font-light px-3 py-2 text-black/70 hover:bg-[#bdc5ba]"
+              to={`/posts/${post.id}`}
+              className="mt-4 inline-block bg-[#a2ae9e] text-black/80 font-light px-4 py-2 rounded hover:bg-[#bdc5ba] w-fit"
             >
-              read more details
+              Read more details
             </Link>
           </div>
         </div>
@@ -50,5 +54,3 @@ export const Homepage = () => {
     </div>
   );
 };
-
-
