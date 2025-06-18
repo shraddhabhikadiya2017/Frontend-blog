@@ -39,7 +39,7 @@ export const Homepage = () => {
             <h2 className="text-black font-bold text-xl">{card.title}</h2>
             <p className="text-gray-900 line-clamp-3">{card.content}</p>
             <Link
-              to="/"
+               to={`/posts/${card.id}`}
               className="self-start bg-[#a2ae9e] rounded-md font-light px-3 py-2 text-black/70 hover:bg-[#bdc5ba]"
             >
               read more details
@@ -50,3 +50,5 @@ export const Homepage = () => {
     </div>
   );
 };
+
+
