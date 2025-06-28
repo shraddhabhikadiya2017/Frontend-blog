@@ -1,41 +1,65 @@
 import { useState } from "react";
+import { createPost } from "../server/posts.js";
 
 export const AddNewPost = () => {
   const [title, setTitle] = useState("");
-  const [image, setImage] = useState("");
+  const [cover, setCover] = useState("");
   const [content, setContent] = useState("");
+  const [author, setAuthor] = useState("");
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!title || !image || !content) {
-      alert("Please fill all fields.");
+    if (!title || !cover || !content || !author) {
+      setMessage("Please fill in all fields.");
+      setMessageType("error");
+      setTimeout(() => setMessage(""), 2000);
       return;
     }
 
-    const posts = JSON.parse(localStorage.getItem("posts")) || [];
-
     const newPost = {
-      id: Date.now().toString(),
       title,
-      image,
+      cover: cover,
       content,
+      author, 
     };
 
-    posts.push(newPost);
-    localStorage.setItem("posts", JSON.stringify(posts));
 
-    setTitle("");
-    setImage("");
-    setContent("");
-
-    alert("Post created successfully!");
+    try {
+      await createPost(newPost);
+      setTitle("");
+      setCover("");
+      setContent("");
+      setAuthor("");
+      setMessage("Post created successfully!");
+      setMessageType("success");
+      setTimeout(() => setMessage(""), 2000);
+    } catch (err) {
+      console.error(err);
+      setMessage("Failed to create post. Please try again.");
+      setMessageType("error");
+      setTimeout(() => setMessage(""), 2000);
+    }
   };
+
+  const alertClasses =
+    messageType === "success"
+      ? "text-green-700 bg-green-100 border-green-300"
+      : "text-red-700 bg-red-100 border-red-300";
 
   return (
     <div className="max-w-3xl mx-auto mt-10 p-4">
       <h2 className="text-2xl font-bold mb-6 text-gray-800">Create New Post</h2>
 
+      {message && (
+        <div className={`mb-4 px-4 py-2 rounded border ${alertClasses}`}>
+          {message}
+        </div>
+      )}
+
+      
       <form
         onSubmit={handleSubmit}
         className="bg-white border rounded-md p-8 space-y-6 shadow-md"
@@ -61,8 +85,8 @@ export const AddNewPost = () => {
             type="text"
             className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#a2ae9e] text-gray-900"
             placeholder="Paste image URL"
-            value={image}
-            onChange={(e) => setImage(e.target.value)}
+            value={cover}
+            onChange={(e) => setCover(e.target.value)}
           />
         </div>
 
@@ -75,6 +99,19 @@ export const AddNewPost = () => {
             placeholder="Write your content here..."
             value={content}
             onChange={(e) => setContent(e.target.value)}
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">
+            Author:
+          </label>
+          <input
+            type="text"
+            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#a2ae9e] text-gray-900"
+            placeholder="Author name"
+            value={author}
+            onChange={(e) => setAuthor(e.target.value)}
           />
         </div>
 

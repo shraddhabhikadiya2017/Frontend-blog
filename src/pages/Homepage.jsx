@@ -1,12 +1,25 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router";
+import axios from "axios";
 
 export const Homepage = () => {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    const storedPosts = JSON.parse(localStorage.getItem("posts")) || [];
-    setPosts(storedPosts);
+    const fetchPosts = async () => {
+      try {
+        const { data } = await axios.get("http://localhost:4000/posts");
+        if (Array.isArray(data)) {
+          setPosts(data);
+        } else {
+          console.error("Invalid response format:", data);
+        }
+      } catch (err) {
+        console.error("Error fetching posts:", err);
+      }
+    };
+
+    fetchPosts();
   }, []);
 
   if (posts.length === 0) {
@@ -26,7 +39,7 @@ export const Homepage = () => {
         >
           <div className="w-44 h-44 flex-shrink-0">
             <img
-              src={post.image}
+              src={post.cover}
               alt={post.title}
               className="w-full h-full object-cover"
             />
