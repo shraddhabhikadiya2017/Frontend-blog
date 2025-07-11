@@ -1,9 +1,10 @@
 import axios from 'axios';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const getAllPosts = async () => {
 	try {
-		const { data } = await axios.get('http://localhost:4000/posts');
+		const { data } = await axios.get(`${API_BASE_URL}/posts`);
 		if (!data || !Array.isArray(data)) {
 			throw new Error('Invalid data format received from the server');
 		}
@@ -17,7 +18,7 @@ const getAllPosts = async () => {
 
 const getPostById = async (id) => {
   try {
-    const { data } = await axios.get(`http://localhost:4000/posts/${id}`);
+    const { data } = await axios.get(`${API_BASE_URL}/posts/${id}`);
     if (!data || typeof data !== 'object') {
       throw new Error('Invalid post data received from the server');
     }
@@ -31,7 +32,7 @@ const getPostById = async (id) => {
 
 const createPost = async (post) => {
   try {
-    const { data } = await axios.post('http://localhost:4000/posts', post);
+    const { data } = await axios.post(`${API_BASE_URL}/posts`, post);
     if (!data || typeof data !== 'object') {
       throw new Error('Invalid post data received from the server');
     }
@@ -45,7 +46,7 @@ const createPost = async (post) => {
 
 const updatePost = async (id, updatedPost) => {
   try {
-    const { data } = await axios.put(`http://localhost:4000/posts/${id}`, updatedPost);
+    const { data } = await axios.put(`${API_BASE_URL}/posts/${id}`, updatedPost);
     if (!data || typeof data !== 'object') {
       throw new Error('Invalid updated post data received from the server');
     }
@@ -58,7 +59,7 @@ const updatePost = async (id, updatedPost) => {
 
 const deletePost = async (id) => {
   try {
-    await axios.delete(`http://localhost:4000/posts/${id}`);
+    await axios.delete(`${API_BASE_URL}/posts/${id}`);
     return true;
   } catch (error) {
     console.error(`Error deleting post with id ${id}:`, error);
