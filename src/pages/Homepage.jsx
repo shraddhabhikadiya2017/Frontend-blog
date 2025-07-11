@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router";
 import axios from "axios";
+import { API_BASE_URL } from "../server/posts";
 
 export const Homepage = () => {
   const [posts, setPosts] = useState([]);
@@ -8,7 +9,7 @@ export const Homepage = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const { data } = await axios.get("http://localhost:4000/posts");
+        const { data } = await axios.get(`${API_BASE_URL}/posts`);
         if (Array.isArray(data)) {
           setPosts(data);
         } else {
